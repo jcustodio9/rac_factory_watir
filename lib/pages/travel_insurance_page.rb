@@ -12,8 +12,8 @@ class TravelInsurancePage
 	link 		:return_date_picker, xpath: '//input[@id="returnDate"]/following-sibling::a'
 	h4 			:calendar_label, xpath: '//div[contains(@class, "ui-datebox-container")]//div/div[contains(@class, "ui-datebox-gridlabel")]/h4'
 	
-	#span 		:calendar_next, xpath: '//div[contains(@class, "ui-datebox-container ui-overlay-shadow ui-corner-all pop ui-body-b in")]//div[contains(@class, "gridplus")]//span[contains(@class, "ui-icon-plus")]'
-	span 		:calendar_next, css: 'body > div.container.ui-page.ui-body-c.ui-page-active > div.ui-datebox-container.ui-overlay-shadow.ui-corner-all.pop.ui-body-b.in > div.ui-datebox-gridheader > div.ui-datebox-gridplus.ui-btn.ui-btn-inline.ui-btn-icon-notext.ui-btn-corner-all.ui-shadow.ui-btn-up-a > span > span.ui-icon.ui-icon-plus.ui-icon-shadow'
+	span 		:calendar_next, xpath: '//div[contains(@class, "ui-datebox-container ui-overlay-shadow ui-corner-all pop ui-body-b in")]//div[contains(@class, "gridplus")]//span[contains(@class, "ui-icon-plus")]'
+	#span 		:calendar_next, css: 'body > div.container.ui-page.ui-body-c.ui-page-active > div.ui-datebox-container.ui-overlay-shadow.ui-corner-all.pop.ui-body-b.in > div.ui-datebox-gridheader > div.ui-datebox-gridplus.ui-btn.ui-btn-inline.ui-btn-icon-notext.ui-btn-corner-all.ui-shadow.ui-btn-up-a > span > span.ui-icon.ui-icon-plus.ui-icon-shadow'
 
 	text_field 	:traveler_1_age, xpath: '//input[@id="travelerAge_1"]'
 	text_field 	:traveler_2_age, xpath: '//input[@id="travelerAge_2"]'
@@ -53,10 +53,14 @@ class TravelInsurancePage
       		when "iphone","ipad","android_phone","android_tablet" then
 				departure_date_picker
 				until calendar_label_element.text.eql? departure_month + ' ' + departure_year
-					#why is it not working in javascript datepicker for mobile???!??!??!
-					calendar_next
-
-
+					@browser.element(:xpath, '//div[contains(@class, "ui-datebox-container ui-overlay-shadow ui-corner-all pop ui-body-b in")]//div[contains(@class, "gridplus")]//span[contains(@class, "ui-icon-plus")]').click
+				end
+				@browser.divs(:xpath, '//div[contains(@class, "ui-datebox-container ui-overlay-shadow ui-corner-all pop ui-body-b in")]/div[@class="ui-datebox-grid"]/div[@class="ui-datebox-gridrow"]').each do |cell|
+					#puts cell.text
+					if cell.text.eql? "#{departure_date}"
+						cell.element(:xpath, '//div[contains(@class, "ui-datebox-container ui-overlay-shadow ui-corner-all pop ui-body-b in")]/div[@class="ui-datebox-grid"]/div[@class="ui-datebox-gridrow"]/div[contains(@class, "ui-datebox-griddate")]').fire_event "onclick"
+						break
+					end
 				end
       		else
 				frame = @browser.iframe(:id, 'quote-frame')
