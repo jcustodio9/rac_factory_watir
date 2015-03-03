@@ -64,3 +64,8 @@ When(/^I click Get Quote$/) do
   end  
 end
 
+When(/^I verify Quote Page is displayed$/) do
+  on TravelInsurancePage do |page|
+    page.verify_quote_page 
+  end  
+end

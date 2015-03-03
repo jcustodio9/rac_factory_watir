@@ -10,13 +10,16 @@ class TravelInsurancePage
 	button 		:next_button, xpath: '//input[@id="quoteSubmitBtn"]'
 	link 		:departure_date_picker, xpath: '//input[@id="departureDate"]/following-sibling::a'
 	link 		:return_date_picker, xpath: '//input[@id="returnDate"]/following-sibling::a'
-	h4 			:calendar_label, xpath: '//div[contains(@class, "ui-datebox-container")]//div/div[contains(@class, "ui-datebox-gridlabel")]/h4'
-	
-	span 		:calendar_next, xpath: '//div[contains(@class, "ui-datebox-container ui-overlay-shadow ui-corner-all pop ui-body-b in")]//div[contains(@class, "gridplus")]//span[contains(@class, "ui-icon-plus")]'
-	#span 		:calendar_next, css: 'body > div.container.ui-page.ui-body-c.ui-page-active > div.ui-datebox-container.ui-overlay-shadow.ui-corner-all.pop.ui-body-b.in > div.ui-datebox-gridheader > div.ui-datebox-gridplus.ui-btn.ui-btn-inline.ui-btn-icon-notext.ui-btn-corner-all.ui-shadow.ui-btn-up-a > span > span.ui-icon.ui-icon-plus.ui-icon-shadow'
-
+	h4 			:calendar_label, xpath: '//div[contains(@class, "ui-datebox-container ui-overlay-shadow ui-corner-all pop ui-body-b in")]//div/div[contains(@class, "ui-datebox-gridlabel")]/h4'
+	span 		:calendar_next, xpath: '//div[contains(@class, "ui-datebox-container ui-overlay-shadow ui-corner-all pop ui-body-b in")]//div[contains(@class, "gridplus")]//span[contains(@class, "ui-icon-plus")]'	
 	text_field 	:traveler_1_age, xpath: '//input[@id="travelerAge_1"]'
 	text_field 	:traveler_2_age, xpath: '//input[@id="travelerAge_2"]'
+	select_list :accompanied_children, xpath: '//select[@id="totalChildren"]'
+	select_list :is_rac_member, xpath: '//select[@id="isMember"]'
+	span 		:pre_existing_yes, xpath: '//span[contains(@class, "slider")][contains(text(), "Yes")]'
+	span 		:pre_existing_no, xpath: '//span[contains(@class, "slider")][contains(text(), "No")]'
+	h1 			:your_quote_header_mobile, xpath: '//h1[contains(text(), "Your Quote")]'
+	div 		:trip_info_pc, css: '#content > div > div > table > thead > tr > th'
 
 
 	def verify_travel_insurance_page
@@ -53,12 +56,12 @@ class TravelInsurancePage
       		when "iphone","ipad","android_phone","android_tablet" then
 				departure_date_picker
 				until calendar_label_element.text.eql? departure_month + ' ' + departure_year
-					@browser.element(:xpath, '//div[contains(@class, "ui-datebox-container ui-overlay-shadow ui-corner-all pop ui-body-b in")]//div[contains(@class, "gridplus")]//span[contains(@class, "ui-icon-plus")]').click
+					calendar_next_element.click
 				end
-				@browser.divs(:xpath, '//div[contains(@class, "ui-datebox-container ui-overlay-shadow ui-corner-all pop ui-body-b in")]/div[@class="ui-datebox-grid"]/div[@class="ui-datebox-gridrow"]').each do |cell|
-					#puts cell.text
+				@browser.divs(:xpath, '//div[contains(@class, "ui-datebox-container ui-overlay-shadow ui-corner-all pop ui-body-b in")]/div[@class="ui-datebox-grid"]/div[@class="ui-datebox-gridrow"]/div[contains(@class, "ui-datebox-griddate")]').each do |cell|
 					if cell.text.eql? "#{departure_date}"
-						cell.element(:xpath, '//div[contains(@class, "ui-datebox-container ui-overlay-shadow ui-corner-all pop ui-body-b in")]/div[@class="ui-datebox-grid"]/div[@class="ui-datebox-gridrow"]/div[contains(@class, "ui-datebox-griddate")]').fire_event "onclick"
+						cell.flash
+						cell.click
 						break
 					end
 				end
@@ -85,8 +88,17 @@ class TravelInsurancePage
 	def pick_return_date return_date,return_month,return_year
 		case ENV['BROWSER']
       		when "iphone","ipad","android_phone","android_tablet" then
-				#return_date_picker
-
+				return_date_picker
+				until calendar_label_element.text.eql? return_month + ' ' + return_year
+					calendar_next_element.click
+				end
+				@browser.divs(:xpath, '//div[contains(@class, "ui-datebox-container ui-overlay-shadow ui-corner-all pop ui-body-b in")]/div[@class="ui-datebox-grid"]/div[@class="ui-datebox-gridrow"]/div[contains(@class, "ui-datebox-griddate")]').each do |cell|
+					if cell.text.eql? "#{return_date}"
+						cell.flash
+						cell.click
+						break
+					end
+				end
       		else
 				frame = @browser.iframe(:id, 'quote-frame')
 				frame.text_field(:id, 'returnDate').fire_event("onfocus")
@@ -109,11 +121,11 @@ class TravelInsurancePage
 
 	def enter_travellers_ages traveller_1,traveller_2
 		unless traveller_1.eql? "NA"
-			sleep 3
 			case ENV['BROWSER']
 			when "iphone","ipad","android_phone","android_tablet" then
-				#if i can move on with the datepicker javascript, this is same as country & destination dropdown logic :)
-
+				next_button
+				sleep 2
+				traveler_1_age_element.send_keys traveller_1
 			else
 				frame = @browser.iframe(:id, 'quote-frame')
 				frame.text_field(:id, 'travelerAge_1').fire_event("onfocus")
@@ -125,7 +137,7 @@ class TravelInsurancePage
 			sleep 3
 			case ENV['BROWSER']
 			when "iphone","ipad","android_phone","android_tablet" then
-
+				traveler_2_age_element.send_keys traveller_2
 			else
 				frame = @browser.iframe(:id, 'quote-frame')
 				frame.text_field(:id, 'travelerAge_2').fire_event("onfocus")
@@ -141,7 +153,7 @@ class TravelInsurancePage
 			sleep 3
 			case ENV['BROWSER']
 			when "iphone","ipad","android_phone","android_tablet" then
-
+				self.accompanied_children = "#{children}"
 			else
 				@browser.iframe(:id, 'quote-frame').select_list(:id, 'totalChildren').select children
 			end
@@ -153,9 +165,7 @@ class TravelInsurancePage
 		unless resident.eql? "NA"
 			sleep 3
 			case ENV['BROWSER']
-			when "iphone","ipad","android_phone","android_tablet" then
-
-			else
+			when "firefox","ie","chrome" then
 				if resident.eql? "Yes"
 					@browser.iframe(:id, 'quote-frame').radio(:id, 'isResident_1').set
 				else
@@ -171,7 +181,7 @@ class TravelInsurancePage
 			sleep 3
 			case ENV['BROWSER']
 			when "iphone","ipad","android_phone","android_tablet" then
-
+				self.is_rac_member = "#{membership}"
 			else
 				@browser.iframe(:id, 'quote-frame').select_list(:id, 'isMember').select membership
 			end
@@ -184,20 +194,36 @@ class TravelInsurancePage
 			sleep 3
 			case ENV['BROWSER']
 			when "iphone","ipad","android_phone","android_tablet" then
-
+				if pre_existing.eql? "Yes"
+        			pre_existing_yes_element.click
+      			else
+      				#do nothing since default is 'No'
+      		 	end
 			end
 		end			
 	end
 
 
 	def click_get_quote
-		sleep 3
 		case ENV['BROWSER']
-		when "iphone","ipad","android_phone","android_tablet" then
+			when "iphone","ipad","android_phone","android_tablet" then
+				next_button
+			else
+				@browser.iframe(:id, 'quote-frame').button(:name, 'getQuote').click
+			end
+		sleep 3	
+	end
 
-		else
-			@browser.iframe(:id, 'quote-frame').button(:name, 'getQuote').click
-		end	
+
+	def verify_quote_page
+		case ENV['BROWSER']
+			when "iphone","ipad","android_phone","android_tablet" then
+				your_quote_header_mobile_element.exists?
+				your_quote_header_mobile_element.flash
+			else
+				trip_info_pc_element.exists?
+				@browser.element(:css, '#content > div > div > table > thead > tr > th').flash
+			end
 	end
 
 

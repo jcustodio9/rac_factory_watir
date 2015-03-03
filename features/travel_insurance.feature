@@ -18,6 +18,7 @@ And I select if resident: <resident>
 And I select RAC membership: <membership>
 And I select if has pre-existing condition: <pre_existing>
 And I click Get Quote
+And I verify Quote Page is displayed
 
 
 Examples:
