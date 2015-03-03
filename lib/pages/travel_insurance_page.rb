@@ -207,6 +207,7 @@ class TravelInsurancePage
 	def click_get_quote
 		case ENV['BROWSER']
 			when "iphone","ipad","android_phone","android_tablet" then
+				next_button_element.focus()
 				next_button
 			else
 				@browser.iframe(:id, 'quote-frame').button(:name, 'getQuote').click

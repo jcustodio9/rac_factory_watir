@@ -23,7 +23,7 @@ case ENV['BROWSER']
 
 	when "firefox" then
 		caps = Selenium::WebDriver::Remote::Capabilities.firefox
-		caps.version = "32.0.1"
+		caps.version = "30"
 		caps.native_events = false
 		caps.javascript_enabled= true
 
@@ -36,7 +36,7 @@ case ENV['BROWSER']
 
 	when "chrome" then
 		caps = Selenium::WebDriver::Remote::Capabilities.chrome
-		caps.version = "39.0.2171.71 m"
+		caps.version = "40.0.2214.115 m"
 		caps.native_events = false
 		caps.javascript_enabled= true
 
