@@ -50,7 +50,7 @@ class Navigation
       	else
         	# Level 1
         	location = @@nav_1 % Hash[menu_item.map{|(k,v)| [k.to_sym(&:downcase),v]}]
-        	@browser.element(xpath: location).hover
+        	@browser.element(xpath: location).fire_event "onmouseover"
         	# Level 2
         	location = @@nav_2 % Hash[menu_item.map{|(k,v)| [k.to_sym(&:downcase),v]}]
         	@browser.element(xpath: location).click
@@ -77,22 +77,10 @@ class Navigation
        	 	    #Click on the link
               location = @@mobile_level_1_link % Hash[menu_item.map{|(k,v)| [k.to_sym(&:downcase),v]}]
               click_mobile_nav_link location
-          
-            when "firefox" then
-              sleep 0.3
-              location = @@nav_1 % Hash[menu_item.map{|(k,v)| [k.to_sym(&:downcase),v]}]
-              @browser.element(xpath: location).fire_event "onmouseover"
-              wait_for_object location
-              sleep 0.4
-              location = @@nav_3 % Hash[menu_item.map{|(k,v)| [k.to_sym(&:downcase),v]}]
-              wait_for_object location
-              sleep 0.5
-              @browser.element(xpath: location).click
-              sleep 0.5
             else
               sleep 0.3
               location = @@nav_1 % Hash[menu_item.map{|(k,v)| [k.to_sym(&:downcase),v]}]
-              @browser.element(xpath: location).hover
+              @browser.element(xpath: location).fire_event "onmouseover"
               wait_for_object location
               sleep 0.4
               location = @@nav_3 % Hash[menu_item.map{|(k,v)| [k.to_sym(&:downcase),v]}]

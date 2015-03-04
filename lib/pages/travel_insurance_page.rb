@@ -68,8 +68,7 @@ class TravelInsurancePage
       		else
 				frame = @browser.iframe(:id, 'quote-frame')
 				frame.text_field(:id, 'departureDate').fire_event("onfocus")
-				frame.element(:class, 'ui-datepicker-month').focus()
-				@browser.send_keys :space
+				frame.button(:name, 'getQuote').focus()
 				until ((frame.element(:class, 'ui-datepicker-month').text.eql? "#{departure_month}".upcase) && (frame.element(:class, 'ui-datepicker-year').text.eql? "#{departure_year}"))
 					frame.link(:class, 'ui-datepicker-next ui-corner-all').click
 				end
@@ -103,7 +102,6 @@ class TravelInsurancePage
       		else
 				frame = @browser.iframe(:id, 'quote-frame')
 				frame.text_field(:id, 'returnDate').fire_event("onfocus")
-				frame.element(:class, 'ui-datepicker-month').focus()
 				until ((frame.element(:class, 'ui-datepicker-month').text.eql? "#{return_month}".upcase) && (frame.element(:class, 'ui-datepicker-year').text.eql? "#{return_year}"))
 					frame.link(:class, 'ui-datepicker-next ui-corner-all').click
 				end
