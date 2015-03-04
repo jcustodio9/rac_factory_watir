@@ -69,6 +69,7 @@ class TravelInsurancePage
 				frame = @browser.iframe(:id, 'quote-frame')
 				frame.text_field(:id, 'departureDate').fire_event("onfocus")
 				frame.element(:class, 'ui-datepicker-month').focus()
+				@browser.send_keys :space
 				until ((frame.element(:class, 'ui-datepicker-month').text.eql? "#{departure_month}".upcase) && (frame.element(:class, 'ui-datepicker-year').text.eql? "#{departure_year}"))
 					frame.link(:class, 'ui-datepicker-next ui-corner-all').click
 				end

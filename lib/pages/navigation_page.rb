@@ -64,32 +64,44 @@ class Navigation
     	menus.each do |menu_item| 
       	# Level 1
       	case ENV['BROWSER']
-      	when "iphone","ipad","android_phone","android_tablet" then
-        	#Expand Level 1
-        	sleep 1
-        	location = @@mobile_level_1_expand % Hash[menu_item.map{|(k,v)| [k.to_sym(&:downcase),v]}]
-        	expand_mobile_nav_menu_line location
-        	#Expand Level 2
-        	sleep 1
-        	location = @@mobile_level_2_expand % Hash[menu_item.map{|(k,v)| [k.to_sym(&:downcase),v]}]
-        	expand_mobile_nav_menu_line location
-        	sleep 1
-       	 	#Click on the link
-        	location = @@mobile_level_1_link % Hash[menu_item.map{|(k,v)| [k.to_sym(&:downcase),v]}]
-        	click_mobile_nav_link location
-    	else
-        	sleep 0.3
-        	location = @@nav_1 % Hash[menu_item.map{|(k,v)| [k.to_sym(&:downcase),v]}]
-        	@browser.element(xpath: location).hover
-        	wait_for_object location
-        	sleep 0.4
-        	location = @@nav_3 % Hash[menu_item.map{|(k,v)| [k.to_sym(&:downcase),v]}]
-        	wait_for_object location
-        	sleep 0.5
-        	@browser.element(xpath: location).click
-        	sleep 0.5
-      	end
-    	end
+          when "iphone","ipad","android_phone","android_tablet" then
+              #Expand Level 1
+              sleep 1
+              location = @@mobile_level_1_expand % Hash[menu_item.map{|(k,v)| [k.to_sym(&:downcase),v]}]
+              expand_mobile_nav_menu_line location
+              #Expand Level 2
+              sleep 1
+              location = @@mobile_level_2_expand % Hash[menu_item.map{|(k,v)| [k.to_sym(&:downcase),v]}]
+              expand_mobile_nav_menu_line location
+              sleep 1
+       	 	    #Click on the link
+              location = @@mobile_level_1_link % Hash[menu_item.map{|(k,v)| [k.to_sym(&:downcase),v]}]
+              click_mobile_nav_link location
+          
+            when "firefox" then
+              sleep 0.3
+              location = @@nav_1 % Hash[menu_item.map{|(k,v)| [k.to_sym(&:downcase),v]}]
+              @browser.element(xpath: location).fire_event "onmouseover"
+              wait_for_object location
+              sleep 0.4
+              location = @@nav_3 % Hash[menu_item.map{|(k,v)| [k.to_sym(&:downcase),v]}]
+              wait_for_object location
+              sleep 0.5
+              @browser.element(xpath: location).click
+              sleep 0.5
+            else
+              sleep 0.3
+              location = @@nav_1 % Hash[menu_item.map{|(k,v)| [k.to_sym(&:downcase),v]}]
+              @browser.element(xpath: location).hover
+              wait_for_object location
+              sleep 0.4
+              location = @@nav_3 % Hash[menu_item.map{|(k,v)| [k.to_sym(&:downcase),v]}]
+              wait_for_object location
+              sleep 0.5
+              @browser.element(xpath: location).click
+              sleep 0.5
+            end
+        end
   	end # click_on_navigation_level_3
 
 

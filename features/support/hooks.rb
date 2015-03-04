@@ -29,7 +29,7 @@ case ENV['BROWSER']
 
 		# This is for increasing the default timeout to 180
 		client = Selenium::WebDriver::Remote::Http::Default.new
-		client.timeout = 180
+		client.timeout = 300
 
 		browser = Watir::Browser.new ENV['BROWSER']
 		browser.driver.manage.window.maximize
