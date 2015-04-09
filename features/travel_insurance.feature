@@ -23,4 +23,4 @@ And I verify Quote Page is displayed
 
 Examples:
 | destination 	| country 		| departure_date 	| departure_month 	| departure_year 	| return_date 	| return_month 	| return_year 	| traveller_1 	| traveller_2 	| children 	| resident 	| membership 	| pre_existing 	|
-| Asia 			| Philippines 	| 17 				| December 			| 2015 				| 9 			| January 		| 2016 			| 32 			| NA 			| 0 		| Yes 		| No 			| No 			|
+| Asia 			| Philippines	| 17 				| September			| 2015 				| 9 			| January 		| 2016 			| 32 			| NA 			| 0 		| Yes 		| No 			| No 			|

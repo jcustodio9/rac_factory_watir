@@ -39,6 +39,7 @@ class TravelInsurancePage
 
 
 	def select_country country
+		wait_for_country_list
 		case ENV['BROWSER']
       		when "iphone","ipad","android_phone","android_tablet" then
 				self.country = "#{country}"
@@ -239,6 +240,20 @@ class TravelInsurancePage
     	else
       		Watir::Wait.until {
         		not @browser.iframe(:id, 'quote-frame').div(xpath: '//div[contains(@id, "load")]').visible?
+      		}
+    	end
+  	end
+
+  	#waits for the country list to be fully loaded
+  	def wait_for_country_list
+    	case ENV['BROWSER']
+    	when "iphone","ipad","android_phone","android_tablet" then
+      		Watir::Wait.until {
+        		self.country = "Select Country"
+      		}
+    	else
+      		Watir::Wait.until {
+        		@browser.iframe(:id, 'quote-frame').select_list(:id, 'destinationCountryID').text.eql? "Select Country"
       		}
     	end
   	end
