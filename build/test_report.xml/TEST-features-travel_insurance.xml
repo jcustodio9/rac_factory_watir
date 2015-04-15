@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite failures="0" errors="0" skipped="0" tests="1" time="78.596261" name="As potential RAC customer I want to get a quote on travel insurance">
+<testcase classname="As potential RAC customer I want to get a quote on travel insurance" name="Get a quote for a travel insurance (outline example : | Asia | Philippines | 17 | September | 2015 | 9 | January | 2016 | 32 | NA | 0 | Yes | No | No |)" time="78.596261">
+  <system-out/>
+  <system-err/>
+</testcase>
+  <system-out>
+    <![CDATA[]]>
+  </system-out>
+  <system-err>
+    <![CDATA[]]>
+  </system-err>
+</testsuite>
