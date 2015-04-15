@@ -56,11 +56,11 @@ end
 
 After do |scenario|
 	unless ENV["BROWSER"].eql? "ie"
-		if scenario.failed?
-			filename = "error-#{@current_page.class}-#{Time.now}.png"
-			@current_page.save_screenshot(filename)
-			embed(filename, 'image/png')
-		end
+		#if scenario.failed?
+		#	filename = "error-#{@current_page.class}-#{Time.now}.png"
+		#	@current_page.save_screenshot(filename)
+		#	embed(filename, 'image/png')
+		#end
 		#browser.close
 		sleep 2
 	end

@@ -14,5 +14,5 @@ ENV['Screen_Short_FOLDER'] = FOLDER
 html_report_location = "#{FOLDER}\\test_report.html"
 
 Cucumber::Rake::Task.new(:travel_insurance_quote) do |t|
-  t.cucumber_opts = "--tags=@travel_insurance_quote --format progress --format html --o " + html_report_location
+  t.cucumber_opts = "--tags=@travel_insurance_quote --format junit --format html --out " + html_report_location
 end
