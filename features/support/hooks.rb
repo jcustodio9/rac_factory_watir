@@ -36,7 +36,7 @@ case ENV['BROWSER']
 
 	when "chrome" then
 		caps = Selenium::WebDriver::Remote::Capabilities.chrome
-		caps.version = "40.0.2214.115 m"
+		caps.version = "41.0.2272.118 m"
 		caps.native_events = false
 		caps.javascript_enabled= true
 
@@ -54,8 +54,13 @@ Before do
 	@browser = browser
 end
 
-After do
+After do |scenario|
 	unless ENV["BROWSER"].eql? "ie"
+		if scenario.failed?
+			filename = "error-#{@current_page.class}-#{Time.now}.png"
+			@current_page.save_screenshot(filename)
+			embed(filename, 'image/png')
+		end
 		#browser.close
 		sleep 2
 	end

@@ -39,7 +39,8 @@ class TravelInsurancePage
 
 
 	def select_country country
-		wait_for_country_list
+		#wait_for_country_list
+		sleep 2
 		case ENV['BROWSER']
       		when "iphone","ipad","android_phone","android_tablet" then
 				self.country = "#{country}"
@@ -211,12 +212,12 @@ class TravelInsurancePage
 				next_button
 			else
 				@browser.iframe(:id, 'quote-frame').button(:name, 'getQuote').click
-			end
-		sleep 3	
+			end	
 	end
 
 
 	def verify_quote_page
+		sleep 5
 		case ENV['BROWSER']
 			when "iphone","ipad","android_phone","android_tablet" then
 				your_quote_header_mobile_element.exists?
