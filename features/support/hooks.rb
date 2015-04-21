@@ -1,4 +1,5 @@
 require 'watir-webdriver'
+require 'watir-webdriver-performance'
 require 'webdriver-user-agent'
 require 'watir-webdriver/wait'
 require 'selenium/server'
@@ -52,6 +53,7 @@ end
 Before do
     browser.cookies.clear
 	@browser = browser
+
 end
 
 After do |scenario|
@@ -62,6 +64,28 @@ After do |scenario|
 		#	embed(filename, 'image/png')
 		#end
 		#browser.close
+
+		load_response_time = @browser.performance.summary[:response_time]/1000
+		load_first_byte = @browser.performance.summary[:time_to_first_byte]/1000
+		load_last_byte = @browser.performance.summary[:time_to_last_byte]/1000
+		load_redirect_count = @browser.performance.navigation[:redirect_count]/1000
+  		load_total_heap_size = @browser.performance.memory[:total_js_heap_size]/1000
+  		load_used_heap_size = @browser.performance.memory[:total_js_heap_size]/1000
+  		load_response_start = @browser.performance.timing[:response_start]/1000
+  		load_response_end = @browser.performance.timing[:response_end]/1000
+  		load_event_start = @browser.performance.timing[:load_event_start]/1000
+  		load_event_end = @browser.performance.timing[:unload_event_end]/1000
+
+  		puts "Response Time: #{load_response_time} seconds."
+  		puts "Time to First Byte: #{load_first_byte} seconds."
+  		puts "Time to Last Byte: #{load_last_byte} seconds."
+  		puts "Redirect Count: #{load_redirect_count} seconds."
+  		puts "Total Heap Size: #{load_total_heap_size} seconds."
+  		puts "Used Heap Size: #{load_used_heap_size} seconds."
+  		puts "Connect Start: #{load_response_start} seconds."
+  		puts "Connect End: #{load_response_end} seconds."
+  		puts "Load Event Start: #{load_event_start} seconds."
+  		puts "Unload Event End: #{load_event_end} seconds."
 		sleep 2
 	end
 end
